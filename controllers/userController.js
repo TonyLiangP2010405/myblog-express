@@ -27,7 +27,7 @@ const createUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const {name} = req.body;
+        const {name} = req.params;
         if (getUserByName(name).length === 0) {
             return res.status(404).json({message: `No users found`})
         }
@@ -41,7 +41,7 @@ const deleteUser = async (req, res) => {
 
 const getUserByName = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name } = req.params;
         const user = await User.getUserByName(name)
         if (user.length === 0) {
             return res.status(404).json({message: `No users found`})
@@ -55,7 +55,8 @@ const getUserByName = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const {name, new_name, email, password} = req.body;
+        const {name} = req.params
+        const {new_name, email, password} = req.body;
         if (getUserByName(name).length === 0) {
             return res.status(404).json({message: `No users found`})
         }
@@ -70,7 +71,8 @@ const updateUser = async (req, res) => {
 
 const updatePassword = async (req, res) => {
     try {
-        const {name, new_password} = req.body;
+        const {name} = req.params
+        const {new_password} = req.body;
         if (getUserByName(name).length === 0) {
             return res.status(404).json({message: `No users found`})
         }
@@ -85,7 +87,8 @@ const updatePassword = async (req, res) => {
 
 const updateName = async (req, res) => {
     try {
-        const {name, new_name} = req.body;
+        const {name} = req.params
+        const {new_name} = req.body;
         if (getUserByName(name).length === 0) {
             return res.status(404).json({message: `No users found`})
         }
@@ -100,7 +103,8 @@ const updateName = async (req, res) => {
 
 const updateEmail = async (req, res) => {
     try {
-        const {name, email} = req.body;
+        const {name} = req.params
+        const {email} = req.body;
         if (getUserByName(name).length === 0) {
             return res.status(404).json({message: `No users found`})
         }
