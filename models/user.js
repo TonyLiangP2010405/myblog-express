@@ -23,9 +23,11 @@ class User {
     }
 
     // update the user table by using username
-    static updateUserByName(name, email, password) {
+    static async updateUserByName(name, email, password) {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const stmt = db.prepare('UPDATE users SET email = ?, password = ? WHERE name = ?;');
-        return stmt.run(email,password, name);
+        return stmt.run(email, hashedPassword, name);
     }
 
     //delete user by using name
