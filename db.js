@@ -7,17 +7,19 @@ const db = new Database(path.join(__dirname, 'database.db'));
 // Create tables (initial setup)
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
-    name varchar(10) PRIMARY KEY NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(10) UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL
   );
   
   CREATE TABLE IF NOT EXISTS blogs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     content TEXT,
-    user_name TEXT,
-    FOREIGN KEY(name) REFERENCES users(name)
+    user_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id)
   );
 `);
 

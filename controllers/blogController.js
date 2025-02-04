@@ -26,7 +26,7 @@ const getAllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.getAllBlogs()
         if (blogs.length === 0) {
-            return res.status(404).json({message: 'No blog found'})
+            return res.status(404).json({message: '没有博客内容'})
         }
         res.status(200).json(blogs)
     }
