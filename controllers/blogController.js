@@ -10,11 +10,17 @@ const Homepage = async (req, res) => {
     }
 }
 
-const createBlog = async (req, res) => {
+const createBlog = async (req, res, next) => {
     try {
         const {title, content} = req.body;
         const blog = Blog.createBlog(title, content);
-        res.status(201).json(blog);
+        if (blog.success) {
+            res.status(201).json(blog);
+        }
+        else {
+            const error = new Error("Blog create failure");
+            next(error)
+        }
     }
     catch (error) {
         res.status(500).json({error: error.message});
