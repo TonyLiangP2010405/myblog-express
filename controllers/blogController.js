@@ -55,6 +55,20 @@ const getBlogByTitle = async (req, res) => {
     }
 }
 
+const getBlogById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const blog = await Blog.getBlogById(id)
+        if (blog.length === 0) {
+            return res.status(404).json({message: `No blogs found`})
+        }
+        res.status(200).json(blog)
+    }
+    catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
 const getBlogByContent = async (req, res) => {
     try {
         const { content } = req.params;
@@ -70,14 +84,18 @@ const getBlogByContent = async (req, res) => {
 }
 
 const updateBlog = async (req, res) => {
+
     try {
         const {id} = req.params
         const {title, content} = req.body;
+        console.log(id, title, content);
         const blog = Blog.getBlogById(id);
+
         if (blog.length === 0) {
             return res.status(404).json({message: `No blogs found`})
         }
         const updateBlog = await Blog.updateBlogById(id, title, content)
+        console.log("test")
         res.status(200).json(updateBlog);
     }
     catch (error) {
@@ -109,4 +127,5 @@ module.exports = {
     updateBlog,
     deleteBlog,
     createBlog,
+    getBlogById,
 }
