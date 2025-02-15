@@ -12,8 +12,29 @@ class User {
 
     //get User by using name
     static getUserByName(name) {
-        const stmt = db.prepare('SELECT * FROM users WHERE name = ?');
-        return stmt.run(name);
+        const stmt = db.prepare('SELECT * FROM users WHERE username = ?');
+        try {
+            const user = stmt.get(name);
+            if (!user) {
+                return {
+                    success: false,
+                    error: "未找到对应名字的用户"
+                };
+            }
+
+            // 返回实际数据
+            return {
+                success: true,
+                data: user
+            }
+
+        } catch (error) {
+            console.error('查询博客失败:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
     }
 
     // create a new user
@@ -57,6 +78,7 @@ class User {
         const stmt = db.prepare('UPDATE users SET password = ? WHERE name = ?;');
         return stmt.run(hashedPassword, name);
     }
+
 }
 
 module.exports = User;

@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const jwt = require('jsonwebtoken');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -50,6 +50,33 @@ const getUserByName = async (req, res) => {
     }
     catch (error) {
         res.status(500).json({error: error.message});
+    }
+}
+
+const checkLogin = async (req, res) => {
+    try {
+        const {name, password} = req.body
+        const user = await User.getUserByName(name)
+        console.log(user.data.id)
+        console.log(user.data.username)
+        if (user.length === 0) {
+            return res.status(404).json({message: `No users found`})
+        }
+        if (user.data.password !== password) {
+            return res.status(401).json({message: '无效的凭证'});
+        }
+        console.log('JWT Secret:', process.env.JWT_SECRET);
+        const token = jwt.sign(
+            {userId: user.data.id,
+                    name:user.data.username},
+            process.env.JWT_SECRET,
+            {expiresIn: '1h'}
+        );
+        res.json({token});
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ message: '服务器错误' });
     }
 }
 
@@ -126,5 +153,6 @@ module.exports = {
     updateName,
     updatePassword,
     deleteUser,
+    checkLogin,
 }
 
